@@ -1,0 +1,69 @@
+@viewport {
+	width: device-width ;
+	zoom: 1.0 ;
+} 
+
+.input {
+	grid-row: 1;
+}
+
+.gridElements {
+	display: grid;
+	grid-gap: 10px;
+}
+
+h1 {
+	font-size: 18pt;
+	color: #ffffff;
+}
+
+body {
+    margin: 5;
+    padding: 5;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background-color: rgb(79, 143, 255);
+}
+
+.buttons {
+	box-shadow:inset 0px 1px 0px 0px #cf866c;
+	background:linear-gradient(to bottom, #d0451b 5%, #bc3315 100%);
+	background-color:#d0451b;
+	border-radius:3px;
+	border:1px solid #942911;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:14px;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #854629;
+	grid-row: 2;
+	margin-left: auto;
+}
+.buttons:hover {
+	background:linear-gradient(to bottom, #bc3315 5%, #d0451b 100%);
+	background-color:#bc3315;
+}
+.buttons:active {
+	position:relative;
+	top:1px;
+}
+
+.buttons:link {
+    text-decoration: none;
+}
+
+#nameLabel {
+	font-weight: bold;
+	color: #ffffff;
+}
+
+#playerTable {
+	color: #ffffff;
+	padding:0 5px 0 0;
+}
+
+#headingRow {
+	font-weight: bolder;
+}

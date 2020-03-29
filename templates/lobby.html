@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>UNO Lobby</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/lobby.css') }}">
+    </head>
+    
+    <body>
+        <h1>Welcome to your UNO mobile Lobby!</h1>
+        <!-- <div class="generalBtn">
+            <button id="testBtn" class="generalBtn">Click me</button>
+        </div> -->
+        <label>Below you will find players who are ready to play!</label>
+        <table class="table" id="playerTable">
+            <tr id="headingRow">
+                <th>Player Name</th>
+                <th>Status</th>
+            </tr>
+        </table>
+        <button class="buttons" id="readyBtn">Ready!</button>
+    </body>    
+    <script type="text/javascript" src="{{ url_for('static', filename='js/lobby.js') }}"></script>
+</html>

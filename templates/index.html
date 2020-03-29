@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title>UNO Lobby</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/lobby.css') }}">
+    </head>
+    
+    <body>
+        <h1>Welcome to UNO mobile!</h1>
+        <!-- <div class="generalBtn">
+            <button id="testBtn" class="generalBtn">Click me</button>
+        </div> -->
+        <div class="gridElements">
+
+            <div>
+                <button class="buttons" id="enterBtn">Enter</button>
+            </div>
+    
+            <div class="input">
+                <label id="nameLabel">Name: </label>
+                <input id="nameInput"></input>
+            </div>
+    
+
+        </div>
+       
+        <!-- <script type="text/javascript">
+            const textBox = document.getElementById("nameInput");
+            function click() {
+                var name = textBox.value;
+                fetch('/enter', {
+                    // Specify the method
+                    method: 'POST',
+                    // A JSON payload
+                    // redirect: 'follow',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({'name': name})
+                })
+                .then(function (response) { 
+                    // At this point, Flask has printed our JSON
+                    return response.text();
+                }).then(function (text) {
+                    // Should be 'OK' if everything was successful
+                    console.log(text)
+                    window.location = "/lobby";
+                });
+            }
+            const button2 = document.getElementById("enterBtn");
+            button2.addEventListener("click", click, false);
+        </script> -->
+        <script type="text/javascript" src="{{ url_for('static', filename='js/index.js') }}"></script>
+    </body>    
+</html>
