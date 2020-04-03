@@ -39,22 +39,11 @@ def lobby():
 def getInfo():
     if (request.method == 'GET'):
         print("\n")
-        jsonObj = request.get_json()
+        
         response = list()
         print("RECIEVED INFO REQUEST FROM " + str(request.remote_addr))
-        enterGame = None
-        if (len(users) > 1):
-            enterGame = True
-        else:
-            enterGame = False
         for i in range(len(users)):
-            if (users[i].isReady == False):
-                enterGame = False
-            else:
-                response.append({'name': users[i].getName(), 'ip': users[i].getIP(), 'ready': users[i].isReady()})
-
-        if (enterGame == True):
-            return url_for('enter')
+            response.append({'name': users[i].getName(), 'ip': users[i].getIP(), 'ready': users[i].isReady()})
 
         json = jsonify({'players': response})
         print("RESPONSE to " + str(request.remote_addr) + " " + str(json.get_json()))
@@ -70,9 +59,12 @@ def ready():
                 users[i].setReady()
         return 'OK', 200
         
-@app.route('/enter')
+@app.route('/enter', methods=['POST'])
 def enterGame():
-    return render_template("game.html")
+    if (request.method == 'POST'):
+        print("RECIEVED ENTER GAME REQUEST FROM " + str(request.remote_addr))
+        print(request.get_json())
+        return 'OK', 200
 
 
 if (__name__ == '__main__'):

@@ -19,6 +19,21 @@ function getPlayers() {
         });
 }
 
+function enterGame(jsonObj) {
+    alert("Called entergame");
+    fetch('/enter', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(jsonObj)
+    }).then(function (response) {
+        return response.json();
+    }).then(function (response) {
+        console.log(response);
+        return response;
+    });
+}
+
+var infoTimer = null;
 
 function getInfo() {
     fetch('/gameInfo', {
@@ -33,13 +48,11 @@ function getInfo() {
         return response.json()
     }).then(function (jsonData) {
         // Should be 'OK' if everything was successful
+
+        var allReady = true;
         console.log(jsonData);
         console.log("Json = " + jsonData);
         var table = document.getElementById("playerTable");
-
-        if (table.rows.length - 1 === jsonData.players.length) {
-            return;
-        }
 
         for (var i = 1; i < table.rows.length; i++) {
             table.deleteRow(i);
@@ -54,10 +67,16 @@ function getInfo() {
             cell1.innerHTML = name;
             if (jsonData.players[i].ready === false) {
                 cell2.innerHTML = "Not Ready";
+                allReady = false;
             } else {
                 cell2.innerHTML = "Ready";
             }
             
+        }
+
+        if (allReady === true) {
+            clearInterval(infoTimer);
+            enterGame(jsonData);
         }
     });
 }
@@ -83,6 +102,6 @@ function setReady() {
         });
 }
 
-var infoTimer = setInterval(getInfo, 3000);
+infoTimer = setInterval(getInfo, 3000);
 const readyBtn = document.getElementById("readyBtn");
 readyBtn.addEventListener("click", setReady, false);
