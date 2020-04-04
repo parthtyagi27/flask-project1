@@ -63,8 +63,7 @@ def ready():
 def enterGame():
     if (request.method == 'POST'):
         print("RECIEVED ENTER GAME REQUEST FROM " + str(request.remote_addr))
-        print(request.get_json())
-        return 'OK', 200
+        return render_template('game.html')
 
 
 if (__name__ == '__main__'):

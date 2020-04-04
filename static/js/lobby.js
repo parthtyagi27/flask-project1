@@ -24,7 +24,7 @@ function enterGame(jsonObj) {
     fetch('/enter', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(jsonObj)
+        body: jsonObj
     }).then(function (response) {
         return response.json();
     }).then(function (response) {
@@ -76,7 +76,7 @@ function getInfo() {
 
         if (allReady === true) {
             clearInterval(infoTimer);
-            enterGame(jsonData);
+            alert(enterGame(jsonData));
         }
     });
 }
