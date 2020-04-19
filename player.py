@@ -5,7 +5,7 @@ class Player:
     ready = None
 
     def __init__(self, name, ip):
-        self.cards = list()
+        self.cards = []
         self.name = name
         self.ip = ip
         self.ready = False

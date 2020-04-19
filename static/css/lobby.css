@@ -61,7 +61,12 @@ body {
 
 #playerTable {
 	color: #ffffff;
-	padding:0 5px 0 0;
+	padding:0 10px 0 0;
+}
+
+#nameTable {
+	color: white;
+	padding: 5px;
 }
 
 #headingRow {

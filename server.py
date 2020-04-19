@@ -4,7 +4,7 @@ import player as Player
 import json
 
 app = Flask(__name__)
-games = list()
+game = Game
 users = list()
 
 @app.route('/')
@@ -63,9 +63,33 @@ def ready():
 def enterGame():
     if (request.method == 'POST'):
         print("RECIEVED ENTER GAME REQUEST FROM " + str(request.remote_addr))
+        if (len(users) == 1):
+            return "You need at least 2 people to play!", 500
+        for i in range(len(users)):
+            if (users[i].isReady == False):
+                return "Not everybody is ready yet", 500
         return render_template('game.html')
+
+@app.route('/game', methods=['GET'])
+def game():
+    if (request.method == 'GET'):
+        print("RECIEVED ENTER GAME REQUEST FROM " + str(request.remote_addr))
+        for i in range(len(users)):
+            if (users[i].getIP() == request.remote_addr):
+                if (game.inGame(users[i]) == False):
+                    game.addPlayer(users[i])
+                    return render_template('game.html')
+                else:
+                    return "Already in Game", 500
+
+@app.route('/updateGame', methods=['GET'])
+def updateGame():
+    if (request.method == 'GET'):
+        print("RECIEVED Update GAME REQUEST FROM " + str(request.remote_addr))
+        #check if query contains get cards line
 
 
 if (__name__ == '__main__'):
     app.config['TEMPLATES_AUTO_RELOAD'] = True
+    game = Game.Game()
     app.run(host='0.0.0.0', port=80)

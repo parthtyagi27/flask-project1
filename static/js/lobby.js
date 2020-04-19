@@ -1,4 +1,5 @@
 var ready = false;
+var infoTimer = undefined;
 
 function getPlayers() {
     fetch('/enter', {
@@ -20,20 +21,26 @@ function getPlayers() {
 }
 
 function enterGame(jsonObj) {
-    alert("Called entergame");
+    console.log("Trying to enter game");
+    let canEnter = false;
     fetch('/enter', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: jsonObj
     }).then(function (response) {
-        return response.json();
-    }).then(function (response) {
-        console.log(response);
         return response;
+    }).then(function (response) {
+        console.log(response.status);
+        if (response.status == 500) {
+           canEnter = false;
+        } else {
+            console.log("Im gonna send you to the game page");
+            canEnter = true;
+            window.location = "/game";
+        }
     });
+    return canEnter;
 }
-
-var infoTimer = null;
 
 function getInfo() {
     fetch('/gameInfo', {
@@ -50,17 +57,16 @@ function getInfo() {
         // Should be 'OK' if everything was successful
 
         var allReady = true;
+
         console.log(jsonData);
         console.log("Json = " + jsonData);
-        var table = document.getElementById("playerTable");
+        var table = document.getElementById("nameTable");
 
-        for (var i = 1; i < table.rows.length; i++) {
-            table.deleteRow(i);
-        }
+        table.innerHTML = "";
 
         for (var i = 0; i < jsonData.players.length; i++) {
             
-            row = table.insertRow(i + 1);
+            row = table.insertRow(i);
             var name = jsonData.players[i].name;
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
@@ -74,9 +80,17 @@ function getInfo() {
             
         }
 
-        if (allReady === true) {
-            clearInterval(infoTimer);
-            alert(enterGame(jsonData));
+        if (allReady === true && jsonData.players.length > 1) {
+            let result = enterGame(jsonData);
+            console.log("Enter Game result = " + result);
+            if (result === true) {
+                clearInterval(infoTimer);
+                console.log("setting location to game")
+               
+            } else {
+                // setInterval(infoTimer);
+                alert(console.log("cant join game yet"));
+            }
         }
     });
 }
@@ -102,6 +116,6 @@ function setReady() {
         });
 }
 
-infoTimer = setInterval(getInfo, 3000);
 const readyBtn = document.getElementById("readyBtn");
 readyBtn.addEventListener("click", setReady, false);
+infoTimer = setInterval(getInfo, 3000);
