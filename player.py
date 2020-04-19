@@ -1,8 +1,4 @@
 class Player:
-    cards = None
-    name = None
-    ip = None
-    ready = None
 
     def __init__(self, name, ip):
         self.cards = []
@@ -21,3 +17,9 @@ class Player:
 
     def setReady(self):
         self.ready = True
+    
+    def getCards(self):
+        return self.cards
+
+    def setCards(self, cardList):
+        self.cards = cardList
