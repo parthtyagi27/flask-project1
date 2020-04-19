@@ -1,12 +1,11 @@
 from card import Card
+import random
 
 class Game:
-    playerList = None
-    cards = None
 
     def __init__(self):
         self.playerList = []
-        self.cards = []
+        self.cards = list()
         colors = ['red', 'blue', 'green', 'yellow']
         action_cards = ['skip', '+2', 'reverse']
         wild_cards = ['color', '+4']
@@ -57,5 +56,27 @@ class Game:
 
             return players
 
+    def getPlayerCards(self, player):
+        if len(player.getCards()) == 0:
+            # generate cards for the player
+            cards = []
+            for i in range(7):
+                card_index = random.randint(0, len(self.cards) - 1)
+                card = self.cards.pop(card_index)
+                cards.append(card)
+            player.setCards(cards)
+
+        return player.getCards()
+
     def startGame(self):
-        return None
+        turn_index = random.randint(0, len(self.playerList) - 1)
+        self.turn = turn_index
+
+    def getTurn(self):
+        return self.turn
+
+    def nextPlayer(self):
+        self.turn = self.turn + 1
+        if (self.turn == len(self.playerList)):
+            self.turn = 0
+        return self.getTurn()
