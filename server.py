@@ -80,13 +80,37 @@ def game():
                     game.addPlayer(users[i])
                     return render_template('game.html')
                 else:
-                    return "Already in Game", 500
+                    return render_template('game.html')
 
 @app.route('/updateGame', methods=['GET'])
 def updateGame():
+
     if (request.method == 'GET'):
-        print("RECIEVED Update GAME REQUEST FROM " + str(request.remote_addr))
+        print("RECIEVED UPDATE GAME REQUEST FROM " + str(request.remote_addr))
+        #check if requester is a user
+        user = None
+        for i in range(len(users)):
+            if (users[i].getIP() == request.remote_addr):
+                if (game.inGame(users[i]) == True):
+                    user = users[i]
+        if user == None:
+            return 'Error', 500
         #check if query contains get cards line
+        query_string = request.query_string
+        queries = []
+        response = list()
+        query = request.args.get("info")
+        if query == "cards":
+            player_cards = game.getPlayerCards(user)
+            for card in player_cards:
+                response.append(card.getAsDict())
+            json = jsonify({'cards' : response}) 
+            print(json.get_json())
+            return json
+        if query == "turn":
+            # add get turn code
+            return
+        return 'OK', 200
 
 
 if (__name__ == '__main__'):
