@@ -30,6 +30,8 @@ class Game:
         print("Listing Cards:")
         for i in range(len(self.cards)):
             print(str(self.cards[i]))
+
+        self.turn = None
         
 
 
@@ -45,16 +47,17 @@ class Game:
                 return True
         return False
     
-    def getPlayers(self, ip):
-        if (self.inGame(ip) == False):
-            return None
-        else:
-            players = list(list())
-            for i in range(len(self.playerList)):
-                players[i]['name'] = self.playerList[i][0]
-                players[i]['ip'] = self.playerList[i][1]
+    def getPlayers(self):
+        # if (self.inGame(ip) == False):
+        #     return None
+        # else:
+        #     players = list(list())
+        #     for i in range(len(self.playerList)):
+        #         players[i]['name'] = self.playerList[i][0]
+        #         players[i]['ip'] = self.playerList[i][1]
 
-            return players
+        #     return players
+        return self.playerList
 
     def getPlayerCards(self, player):
         if len(player.getCards()) == 0:
@@ -71,6 +74,11 @@ class Game:
     def startGame(self):
         turn_index = random.randint(0, len(self.playerList) - 1)
         self.turn = turn_index
+
+    def gameStarted(self):
+        if self.turn == None:
+            return False
+        return True
 
     def getTurn(self):
         return self.turn
