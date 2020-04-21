@@ -89,7 +89,7 @@ function getInfo() {
                
             } else {
                 // setInterval(infoTimer);
-                alert(console.log("cant join game yet"));
+                console.log("cant join game yet");
             }
         }
     });
