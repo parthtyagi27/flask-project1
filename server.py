@@ -78,13 +78,14 @@ def game():
             if (users[i].getIP() == request.remote_addr):
                 if (game.inGame(users[i]) == False):
                     game.addPlayer(users[i])
+                    if len(game.getPlayers()) == len(users):
+                        game.startGame()
                     return render_template('game.html')
                 else:
                     return render_template('game.html')
 
 @app.route('/updateGame', methods=['GET'])
 def updateGame():
-
     if (request.method == 'GET'):
         print("RECIEVED UPDATE GAME REQUEST FROM " + str(request.remote_addr))
         #check if requester is a user
@@ -97,20 +98,45 @@ def updateGame():
             return 'Error', 500
         #check if query contains get cards line
         query_string = request.query_string
-        queries = []
         response = list()
-        query = request.args.get("info")
-        if query == "cards":
-            player_cards = game.getPlayerCards(user)
-            for card in player_cards:
-                response.append(card.getAsDict())
-            json = jsonify({'cards' : response}) 
-            print(json.get_json())
-            return json
-        if query == "turn":
-            # add get turn code
-            return
-        return 'OK', 200
+        info_query_string = request.args.get("info")
+        # info_queries = []
+        # # test how the query looks like with csv formatting
+        # print(query)
+        # if query == "cards":
+        #     player_cards = game.getPlayerCards(user)
+        #     for card in player_cards:
+        #         response.append(card.getAsDict())
+        #     json = jsonify({'cards' : response}) 
+        #     print(json.get_json())
+        #     return json
+        # if query == "turn":
+        #     # add get turn code
+        #     return
+        info_queries = info_query_string.split(",")
+        print("Info queries = " + str(info_queries))
+        for info_query in info_queries:
+            if info_query == "cards":
+                cards_list = list()
+                player_cards = game.getPlayerCards(user)
+                for card in player_cards:
+                    cards_list.append(card.getAsDict())
+                cards_dict = {'cards' : cards_list} 
+                print(cards_dict)
+                response.append(cards_dict)
+
+            if info_query == "turn":
+                if game.gameStarted() == False:
+                    game.startGame()
+                turn_response = {"turn": game.getTurn()}
+                response.append(turn_response)
+        
+        if len(response) == 0:
+            return 'No update generated', 200
+        else:
+            print(jsonify(response).get_json())
+            return jsonify(response)
+        # return 'OK', 200
 
 
 if (__name__ == '__main__'):
