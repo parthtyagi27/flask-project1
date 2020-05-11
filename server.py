@@ -122,19 +122,19 @@ def updateGame():
                 for card in player_cards:
                     cards_list.append(card.getAsDict())
                 cards_dict = {'cards' : cards_list} 
-                print(cards_dict)
-                response.append(cards_dict)
-
+                # print(cards_dict)
+                # response.append(cards_dict)
+                response.append({'cards': cards_list})
             if info_query == "turn":
                 if game.gameStarted() == False:
                     game.startGame()
-                turn_response = {"turn": game.getTurn()}
-                response.append(turn_response)
-        
+                # turn_response = {"turn": game.getTurn()}
+                # response.append(turn_response)
+                response.append({'turn': game.getTurn()})
         if len(response) == 0:
             return 'No update generated', 200
         else:
-            print(jsonify(response).get_json())
+            # print(jsonify({response}).get_json())
             return jsonify(response)
         # return 'OK', 200
 
