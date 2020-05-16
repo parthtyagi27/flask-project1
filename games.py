@@ -88,3 +88,6 @@ class Game:
         if (self.turn == len(self.playerList)):
             self.turn = 0
         return self.getTurn()
+
+    def getPlayer(self, index):
+        return self.playerList[index]
