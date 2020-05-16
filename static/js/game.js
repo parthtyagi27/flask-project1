@@ -29,9 +29,20 @@ function updateUI(data) {
         cards = responseCards;
     console.log(cards);
     if (turn === null || turn != responseTurn)
-        turn = responseTurn;
+        turn = responseTurn.turn;
     console.log(turn);
-    document.getElementById("turnLabel").innerHTML = turn;
+    document.getElementById("turnLabel").innerHTML = "It's " + turn + "'s turn";
+
+    const cardTable = document.getElementById("cards_table");
+    cards = cards.cards;
+    for (let i = 0; i < cards.length; i++) {
+        currentCard = cards[i];
+        let row = cardTable.insertRow(i);
+        let colorCell = row.insertCell(0);
+        let valueCell = row.insertCell(1);
+        colorCell.innerHTML = currentCard.color;
+        valueCell.innerHTML = currentCard.value;
+    }
 }
 
 window.onload = function() {
