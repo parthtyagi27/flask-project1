@@ -130,7 +130,7 @@ def updateGame():
                     game.startGame()
                 # turn_response = {"turn": game.getTurn()}
                 # response.append(turn_response)
-                response.append({'turn': game.getTurn()})
+                response.append({'turn': game.getPlayer(game.getTurn()).getName()})
         if len(response) == 0:
             return 'No update generated', 200
         else:
