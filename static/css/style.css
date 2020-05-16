@@ -6,3 +6,25 @@
 body {
     background-color: rgb(79, 143, 255);
 }
+
+label {
+	color: white;
+	font-family: Arial;
+}
+
+.cards_div {
+	font-family: Arial, Helvetica, sans-serif;
+	padding-top: 10px;
+	margin-left: auto;
+	text-align: center;
+}
+
+#cards_label_table {
+	margin-right: 25px;
+	text-align: center;
+}
+
+#cards_table {
+	padding-right: 5px;
+	text-align: center;
+}
