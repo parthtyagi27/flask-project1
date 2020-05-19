@@ -6,6 +6,8 @@ class Game:
     def __init__(self):
         self.playerList = []
         self.cards = list()
+        self.disposedCards = list()
+        self.currentCard = None
         colors = ['red', 'blue', 'green', 'yellow']
         action_cards = ['skip', '+2', 'reverse']
         wild_cards = ['color', '+4']
@@ -33,7 +35,6 @@ class Game:
 
         self.turn = None
         
-
 
     def addPlayer(self, playerObj):
         self.playerList.append(playerObj)
@@ -74,6 +75,9 @@ class Game:
     def startGame(self):
         turn_index = random.randint(0, len(self.playerList) - 1)
         self.turn = turn_index
+        index = random.randint(0, len(self.cards) - 1)
+        self.disposedCards.append(self.cards[index])
+        self.currentCard = self.cards.pop(index)
 
     def gameStarted(self):
         if self.turn == None:
@@ -91,3 +95,6 @@ class Game:
 
     def getPlayer(self, index):
         return self.playerList[index]
+
+    def getCurrentCard(self):
+        return self.currentCard
