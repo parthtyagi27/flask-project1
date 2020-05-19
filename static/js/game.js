@@ -1,13 +1,13 @@
 var updateTimer = null;
-var cards = []
-var turn = null
+var cards = [];
+var currentCard = {};
+var turn = "";
 
 async function getInfo() {
     let infoString = "";
-    if (cards.length === 0)
-        infoString += "cards,";
-    if (turn === null)
-        infoString += "turn";
+    infoString += "cards,";
+    infoString += "turn,";
+    infoString += "currentCard"
 
     console.log("info query = " + infoString);
     if (infoString === "")
@@ -22,26 +22,56 @@ async function getInfo() {
 }
 
 function updateUI(data) {
-    console.log(data);
-    responseCards = data[0];
-    responseTurn = data[1];
-    if (cards != responseCards)
-        cards = responseCards;
-    console.log(cards);
-    if (turn === null || turn != responseTurn)
-        turn = responseTurn.turn;
-    console.log(turn);
-    document.getElementById("turnLabel").innerHTML = "It's " + turn + "'s turn";
+    let cardsUpdated = false;
+    let turnUpdated = false;
+    let currentCardUpdated = false;
 
-    const cardTable = document.getElementById("cards_table");
-    cards = cards.cards;
-    for (let i = 0; i < cards.length; i++) {
-        currentCard = cards[i];
-        let row = cardTable.insertRow(i);
-        let colorCell = row.insertCell(0);
-        let valueCell = row.insertCell(1);
-        colorCell.innerHTML = currentCard.color;
-        valueCell.innerHTML = currentCard.value;
+    let responseCards = data[0].cards;
+    let responseTurn = data[1].turn;
+    let responseCurrentCard = data[2].currentCard;
+
+    let responseCardsString = JSON.stringify(responseCards);
+    let responseCurrentCardString = JSON.stringify(responseCurrentCard);
+    let currentCardString = JSON.stringify(currentCard);
+    let cardsString = JSON.stringify(cards);
+    
+    if (cardsString !== responseCardsString) {
+        console.log("Cards update!");
+        cardsUpdated = true;
+        console.log(cardsString + " -> " + responseCardsString);
+        cards = responseCards;
+    }
+
+    if (turn !== responseTurn) {
+        console.log("Turn update!");
+        turnUpdated = true;
+        console.log(turn + " -> " + responseTurn);
+        turn = responseTurn;
+    }
+
+    if (currentCardString !== responseCurrentCardString) {
+        console.log("Current card update!");
+        currentCardUpdated = true;
+        console.log(currentCardString + " -> " + responseCurrentCardString);
+        currentCard = responseCurrentCard;
+    }
+
+    if (turnUpdated === true)
+        document.getElementById("turnLabel").innerHTML = "It's " + turn + "'s turn";
+
+    if (currentCardUpdated)
+        document.getElementById("currentCardLabel").innerHTML = "Current Card: " + currentCard.value + " " + currentCard.color;
+
+    if (cardsUpdated === true) {    
+        const cardTable = document.getElementById("cards_table");
+        for (let i = 0; i < cards.length; i++) {
+            currentCard = cards[i];
+            let row = cardTable.insertRow(i);
+            let colorCell = row.insertCell(0);
+            let valueCell = row.insertCell(1);
+            colorCell.innerHTML = currentCard.color;
+            valueCell.innerHTML = currentCard.value;
+        }
     }
 }
 
