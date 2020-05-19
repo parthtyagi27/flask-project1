@@ -10,6 +10,7 @@ body {
 label {
 	color: white;
 	font-family: Arial;
+	display: block;
 }
 
 .cards_div {
