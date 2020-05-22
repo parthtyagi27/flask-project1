@@ -1,6 +1,6 @@
 const textBox = document.getElementById("nameInput");
 function click() {
-    var name = textBox.value;
+    let name = textBox.value;
     fetch('/login', {
         // Specify the method
         method: 'POST',
@@ -14,7 +14,8 @@ function click() {
         return response.text();
     }).then(function (text) {
         // Should be 'OK' if everything was successful
-        console.log(text)
+        console.log(text);
+        sessionStorage.setItem("session_name", name);
         window.location = "/lobby";
         });
 }
