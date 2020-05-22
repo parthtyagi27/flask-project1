@@ -79,7 +79,8 @@ def game():
                 if (game.inGame(users[i]) == False):
                     game.addPlayer(users[i])
                     if len(game.getPlayers()) == len(users):
-                        game.startGame()
+                        if game.gameStarted() == False:
+                            game.startGame()
                     return render_template('game.html')
                 else:
                     return render_template('game.html')
