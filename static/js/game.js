@@ -2,6 +2,9 @@ var updateTimer = null;
 var cards = [];
 var currentCard = {};
 var turn = "";
+var name = sessionStorage.getItem("session_name");
+
+console.log("Session name = " + name);
 
 async function getInfo() {
     let infoString = "";
@@ -64,19 +67,27 @@ function updateUI(data) {
 
     if (cardsUpdated === true) {    
         const cardTable = document.getElementById("cards_table");
+        cardTable.innerHTML = "";
+
         for (let i = 0; i < cards.length; i++) {
-            currentCard = cards[i];
+            let card = cards[i];
             let row = cardTable.insertRow(i);
             let colorCell = row.insertCell(0);
             let valueCell = row.insertCell(1);
-            colorCell.innerHTML = currentCard.color;
-            valueCell.innerHTML = currentCard.value;
+            colorCell.innerHTML = card.color;
+            valueCell.innerHTML = card.value;
+            
+            if (name === turn) {
+                let buttonCell = row.insertCell(2);
+                if (card.color === currentCard.color || card.value === currentCard.value)
+                    buttonCell.innerHTML = "Use";        
+            }
         }
     }
 }
 
 window.onload = function() {
-
+    
 };
 
 getInfo();
