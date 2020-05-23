@@ -79,8 +79,17 @@ function updateUI(data) {
             
             if (name === turn) {
                 let buttonCell = row.insertCell(2);
-                if (card.color === currentCard.color || card.value === currentCard.value)
-                    buttonCell.innerHTML = "Use";        
+                if (card.color === currentCard.color || card.value === currentCard.value) {
+                    let playButton = document.createElement("button");
+                    playButton.id = "useButton";
+                    // playButton.value = "Use";
+                    playButton.textContent = "Use";
+                    playButton.addEventListener("click", function click() {
+                       alert("Playing " + JSON.stringify(card)); 
+                    });
+                    buttonCell.appendChild(playButton);
+                }
+
             }
         }
     }
@@ -89,6 +98,12 @@ function updateUI(data) {
 window.onload = function() {
     
 };
+
+function playCard() {
+    alert("played");
+}
+
+// document.getElementById("useButton").addEventListener("click", playCard, false);
 
 getInfo();
 
