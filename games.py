@@ -12,21 +12,21 @@ class Game:
         action_cards = ['skip', '+2', 'reverse']
         wild_cards = ['color', '+4']
         for color in colors:
-            zero_card = Card("0", color)
+            zero_card = Card("0", color, False)
             self.cards.append(zero_card)
             for i in range(9):
-                new_Card_1 = Card(i + 1, color)
-                new_Card_2 = Card(i + 1, color)
+                new_Card_1 = Card(i + 1, color, False)
+                new_Card_2 = Card(i + 1, color, False)
                 self.cards.append(new_Card_1)
                 self.cards.append(new_Card_2)
             for action in action_cards:
-                new_Card_1 = Card(action, color)
-                new_Card_2 = Card(action, color)
+                new_Card_1 = Card(action, color, True)
+                new_Card_2 = Card(action, color, True)
                 self.cards.append(new_Card_1)
                 self.cards.append(new_Card_2)
         for wild in wild_cards:
             for i in range(4):
-                new_Card = Card(wild, "wild")
+                new_Card = Card(wild, "wild", True)
                 self.cards.append(new_Card)
 
         print("Listing Cards:")
@@ -75,9 +75,16 @@ class Game:
     def startGame(self):
         turn_index = random.randint(0, len(self.playerList) - 1)
         self.turn = turn_index
-        index = random.randint(0, len(self.cards) - 1)
-        self.disposedCards.append(self.cards[index])
-        self.currentCard = self.cards.pop(index)
+
+        starting_card_index = random.randint(0, len(self.cards) - 1)
+        starting_card = self.cards[starting_card_index]
+
+        while starting_card.isActionCard() == True:
+            starting_card_index = random.randint(0, len(self.cards) - 1)
+            starting_card = self.cards[starting_card_index]
+        
+        self.disposedCards.append(starting_card)
+        self.currentCard = self.cards.pop(starting_card_index)
 
     def gameStarted(self):
         if self.turn == None:
