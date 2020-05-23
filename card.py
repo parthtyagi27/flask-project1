@@ -2,12 +2,13 @@ class Card(object):
     
     card_id = 0
 
-    def __init__(self, value, color):
+    def __init__(self, value, color, isActionCard):
         super()
         self.value = value
         self.color = color
         self.card_id = Card.card_id
-        self.json = {"id" : self.card_id, "color" : self.color, "value": self.value}
+        self.action_card = isActionCard
+        self.json = {"id" : self.card_id, "color" : self.color, "value": self.value, "action": self.action_card}
         Card.card_id = Card.card_id + 1
 
     def getValue(self):
@@ -18,6 +19,9 @@ class Card(object):
 
     def getAsDict(self):
         return self.json
+
+    def isActionCard(self):
+        return self.action_card
 
     def __str__(self):
         return str(self.card_id) + " " + str(self.value) + " " + str(self.color)
