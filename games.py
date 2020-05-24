@@ -29,9 +29,9 @@ class Game:
                 new_Card = Card(wild, "wild", True)
                 self.cards.append(new_Card)
 
-        print("Listing Cards:")
-        for i in range(len(self.cards)):
-            print(str(self.cards[i]))
+        # print("Listing Cards:")
+        # for i in range(len(self.cards)):
+        #     print(str(self.cards[i]))
 
         self.turn = None
         
@@ -63,10 +63,10 @@ class Game:
     def getPlayerCards(self, player):
         if len(player.getCards()) == 0:
             # generate cards for the player
-            cards = []
+            cards = list()
             for i in range(7):
                 card_index = random.randint(0, len(self.cards) - 1)
-                card = self.cards.pop(card_index)
+                card = self.cards[card_index]
                 cards.append(card)
             player.setCards(cards)
 
@@ -84,7 +84,7 @@ class Game:
             starting_card = self.cards[starting_card_index]
         
         self.disposedCards.append(starting_card)
-        self.currentCard = self.cards.pop(starting_card_index)
+        self.currentCard = starting_card
 
     def gameStarted(self):
         if self.turn == None:
@@ -105,3 +105,14 @@ class Game:
 
     def getCurrentCard(self):
         return self.currentCard
+
+    def setCurrentCard(self, id, player):
+        self.currentCard = self.cards[id]
+        playerCards = self.getPlayerCards(player)
+        print("Player cards = " + str(playerCards))
+        for i in range(len(playerCards)):
+            print(playerCards[i])
+            if playerCards[i].getCardID() == id:
+                print("Removing " + str(playerCards[i]))
+                playerCards.pop(i)
+                return
