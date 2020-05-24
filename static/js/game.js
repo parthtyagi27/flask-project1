@@ -65,7 +65,8 @@ function updateUI(data) {
     if (currentCardUpdated)
         document.getElementById("currentCardLabel").innerHTML = "Current Card: " + currentCard.value + " " + currentCard.color;
 
-    if (cardsUpdated === true) {    
+    if (cardsUpdated === true || currentCardUpdated === true) {    
+
         const cardTable = document.getElementById("cards_table");
         cardTable.innerHTML = "";
 
@@ -82,14 +83,13 @@ function updateUI(data) {
                 if (card.color === currentCard.color || card.value === currentCard.value) {
                     let playButton = document.createElement("button");
                     playButton.id = "useButton";
-                    // playButton.value = "Use";
                     playButton.textContent = "Use";
                     playButton.addEventListener("click", function click() {
-                       alert("Playing " + JSON.stringify(card)); 
+                       console.log("Playing " + JSON.stringify(card));
+                       playCard(card); 
                     });
                     buttonCell.appendChild(playButton);
                 }
-
             }
         }
     }
@@ -99,11 +99,35 @@ window.onload = function() {
     
 };
 
-function playCard() {
-    alert("played");
+function playCard(card_to_play) {
+    // Send current card to the server
+    let data = {
+        "action": "playCard",
+        "card": card_to_play
+    }
+
+    console.log('Data = ' + JSON.stringify(data));
+
+    fetch('/updateGame', {
+        // Specify the method
+        method: 'POST',
+        // A JSON payload
+        // redirect: 'follow',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+        })
+    .then(function (response) { 
+         // At this point, Flask has printed our JSON
+        return response.text();
+    }).then(function (text) {
+        // Should be 'OK' if everything was successful
+        console.log(text);
+        });
 }
 
-// document.getElementById("useButton").addEventListener("click", playCard, false);
+document.getElementById("pickupButton").addEventListener("click", function click() {
+    alert("Pickup");
+});
 
 getInfo();
 
