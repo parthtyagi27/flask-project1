@@ -23,6 +23,9 @@ class Card(object):
     def isActionCard(self):
         return self.action_card
 
+    def getCardID(self):
+        return self.card_id
+
     def __str__(self):
         return str(self.card_id) + " " + str(self.value) + " " + str(self.color)
 
