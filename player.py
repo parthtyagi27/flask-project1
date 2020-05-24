@@ -1,7 +1,7 @@
 class Player:
 
     def __init__(self, name, ip):
-        self.cards = []
+        self.cards = list()
         self.name = name
         self.ip = ip
         self.ready = False
