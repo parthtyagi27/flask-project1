@@ -1,3 +1,4 @@
+import sys
 from flask import Flask, request, render_template, jsonify, redirect, url_for
 import games as Game
 import player as Player
@@ -85,19 +86,31 @@ def game():
                 else:
                     return render_template('game.html')
 
-@app.route('/updateGame', methods=['GET'])
+@app.route('/updateGame', methods=['GET', 'POST'])
 def updateGame():
+    print("\n")
+    print("RECIEVED UPDATE GAME REQUEST FROM " + str(request.remote_addr))
+    #check if requester is a user
+    user = None
+    for i in range(len(users)):
+        if (users[i].getIP() == request.remote_addr):
+            if (game.inGame(users[i]) == True):
+                user = users[i]
+    if user == None:
+        return 'Error', 500
     if (request.method == 'GET'):
-        print("RECIEVED UPDATE GAME REQUEST FROM " + str(request.remote_addr))
-        #check if requester is a user
-        user = None
-        for i in range(len(users)):
-            if (users[i].getIP() == request.remote_addr):
-                if (game.inGame(users[i]) == True):
-                    user = users[i]
-        if user == None:
-            return 'Error', 500
+        # print("RECIEVED UPDATE GAME REQUEST FROM " + str(request.remote_addr))
+        # #check if requester is a user
+        # user = None
+        # for i in range(len(users)):
+        #     if (users[i].getIP() == request.remote_addr):
+        #         if (game.inGame(users[i]) == True):
+        #             user = users[i]
+        # if user == None:
+        #     return 'Error', 500
+
         #check if query contains get cards line
+        print("GET REQUEST!")
         query_string = request.query_string
         response = list()
         info_query_string = request.args.get("info")
@@ -140,9 +153,22 @@ def updateGame():
             # print(jsonify({response}).get_json())
             return jsonify(response)
         # return 'OK', 200
+    elif request.method == 'POST':
+        print("POST REQUEST!")
+        update_json = request.get_json()
+        if update_json['action'] == "playCard":
+            card_json = update_json['card']
+            print("Playing card = " + str(card_json))
+            game.setCurrentCard(card_json['id'], user)
+            game.nextPlayer()
+            return 'OK', 200
+        elif update_json['action'] == "pickCard":
+            print("bet")
+
 
 
 if (__name__ == '__main__'):
+    # sys.stdout = sys.stderr = open('server-log.txt', 'wt')
     app.config['TEMPLATES_AUTO_RELOAD'] = True
     game = Game.Game()
     app.run(host='0.0.0.0', port=80)
