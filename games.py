@@ -66,7 +66,7 @@ class Game:
             cards = list()
             for i in range(7):
                 card_index = random.randint(0, len(self.cards) - 1)
-                card = self.cards[card_index]
+                card = self.cards.pop(card_index)
                 cards.append(card)
             player.setCards(cards)
 
@@ -83,6 +83,7 @@ class Game:
             starting_card_index = random.randint(0, len(self.cards) - 1)
             starting_card = self.cards[starting_card_index]
         
+        self.cards.pop(starting_card_index)
         self.disposedCards.append(starting_card)
         self.currentCard = starting_card
 
@@ -103,16 +104,38 @@ class Game:
     def getPlayer(self, index):
         return self.playerList[index]
 
+    def getNextPlayer(self):
+        if (self.turn + 1 == len(self.playerList)):
+            return self.playerList[0]
+        else:
+            return self.playerList[self.turn + 1]
+
     def getCurrentCard(self):
         return self.currentCard
 
     def setCurrentCard(self, id, player):
-        self.currentCard = self.cards[id]
+        # self.currentCard = self.cards[id]
         playerCards = self.getPlayerCards(player)
         print("Player cards = " + str(playerCards))
         for i in range(len(playerCards)):
             print(playerCards[i])
             if playerCards[i].getCardID() == id:
                 print("Removing " + str(playerCards[i]))
-                playerCards.pop(i)
-                return
+                self.currentCard = playerCards.pop(i)
+                break
+        if self.currentCard.isActionCard() == True:
+            if self.currentCard.getValue() == "+2" or self.currentCard.getValue() == "+4":
+                nextPlayer = self.getNextPlayer()
+                if self.currentCard.getValue() == "+2":
+                    self.pickUpCard(nextPlayer)
+                    self.pickUpCard(nextPlayer)
+                elif self.currentCard.getValue() == "+4":
+                    self.pickUpCard(nextPlayer)
+                    self.pickUpCard(nextPlayer)
+                    self.pickUpCard(nextPlayer)
+                    self.pickUpCard(nextPlayer)
+
+
+    def pickUpCard(self, user):
+        card_index = random.randint(0, len(self.cards) - 1)
+        self.getPlayerCards(user).append(self.cards.pop(card_index))

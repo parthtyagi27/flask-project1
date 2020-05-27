@@ -20,7 +20,7 @@ async function getInfo() {
         return response.json();
     }).then(function(json) {
         updateUI(json);
-        setTimeout(getInfo, 1500);
+        setTimeout(getInfo, 500);
     });
 }
 
@@ -65,7 +65,7 @@ function updateUI(data) {
     if (currentCardUpdated)
         document.getElementById("currentCardLabel").innerHTML = "Current Card: " + currentCard.value + " " + currentCard.color;
 
-    if (cardsUpdated === true || currentCardUpdated === true) {    
+    if (cardsUpdated === true || currentCardUpdated === true || turnUpdated === true) {    
 
         const cardTable = document.getElementById("cards_table");
         cardTable.innerHTML = "";
@@ -80,7 +80,7 @@ function updateUI(data) {
             
             if (name === turn) {
                 let buttonCell = row.insertCell(2);
-                if (card.color === currentCard.color || card.value === currentCard.value) {
+                if (card.color === currentCard.color || card.value === currentCard.value || card.color === "wild") {
                     let playButton = document.createElement("button");
                     playButton.id = "useButton";
                     playButton.textContent = "Use";
@@ -126,67 +126,29 @@ function playCard(card_to_play) {
 }
 
 document.getElementById("pickupButton").addEventListener("click", function click() {
-    alert("Pickup");
+    let data = {
+        "action": "pickCard"
+    }
+
+    let dataString = JSON.stringify(data);
+
+    console.log('Data = ' + dataString);
+
+    fetch('/updateGame', {
+        // Specify the method
+        method: 'POST',
+        // A JSON payload
+        // redirect: 'follow',
+        headers: {'Content-Type': 'application/json'},
+        body: dataString
+        })
+    .then(function (response) { 
+         // At this point, Flask has printed our JSON
+        return response.text();
+    }).then(function (text) {
+        // Should be 'OK' if everything was successful
+        console.log(text);
+        });
 });
 
 getInfo();
-
-// async function getInfo(queryString) {
-//     console.log("info query = " + queryString);
-//     if (queryString === "")
-//         return null;
-//     const response = await fetch("/updateGame?info=" + queryString, { method: 'GET',});
-//     const response_1 = response.json;
-//     // console.log("Recieved response from getInfo...");
-//     // console.log(response_1);
-//     // responseObj = response;
-//     // return response;
-//     return response_1;
-// }
-
-// function updateGame() {
-//     // let queries = [];
-//     let infoQueries = [];
-//     let updateQueries = [];
-
-//     if (cards.length === 0)
-//         infoQueries.push("cards");
-//     if (turn == null)
-//         infoQueries.push("turn");
-
-//     // if (JSON.stringify(cards) === "{}") {
-//     //     fetch('/updateGame?info=cards', {
-//     //         method: 'GET',
-//     //     }).then(function (response) {
-//     //         return response.json();
-//     //     }).then(function (response) {
-//     //         cards = response;
-//     //         console.log(cards);
-//     //     });
-//     // } else if (turn === null) {
-
-//     // }
-//     let infoString = "";
-//     for (let i = 0; i < infoQueries.length; i++) {
-//         infoString += infoQueries[i];
-//         // console.log("Info Query[" + i + "] = " + infoQueries[i]);
-//         if (i < infoQueries.length - 1)
-//             infoString += ","
-//     }
-//     // console.log(infoString);
-//     // if (infoString !== "") {
-//     //     console.log(getInfo(infoString));
-//     // }
-//     let infoResponse = getInfo(infoString);
-//     console.log(infoResponse);
-//     if (infoResponse != null) {
-//         if (cards.length === 0) {
-//             // fetch cards from response object
-//             // let cardResponse = JSON.parse(infoResponse);
-//             // infoResponse = JSON.parse(infoResponse);
-//             // console.log(infoResponse);
-//             // console.log(infoResponse);
-//         }
-//     }
-// }
-// updateTimer = setInterval(updateGame, 1000)

@@ -163,7 +163,10 @@ def updateGame():
             game.nextPlayer()
             return 'OK', 200
         elif update_json['action'] == "pickCard":
-            print("bet")
+            print("Pick up Card request!")
+            game.pickUpCard(user)
+            game.nextPlayer()
+            return 'OK', 200
 
 
 
