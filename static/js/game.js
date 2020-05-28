@@ -3,6 +3,10 @@ var cards = [];
 var currentCard = {};
 var turn = "";
 var name = sessionStorage.getItem("session_name");
+var colorOptions = document.getElementById("colorOptionsDiv");
+colorOptions.style.display = "none";
+var colorButton = null;
+let playingCard = {}
 
 console.log("Session name = " + name);
 
@@ -20,7 +24,7 @@ async function getInfo() {
         return response.json();
     }).then(function(json) {
         updateUI(json);
-        setTimeout(getInfo, 500);
+        setTimeout(getInfo, 2500); 
     });
 }
 
@@ -59,7 +63,7 @@ function updateUI(data) {
         currentCard = responseCurrentCard;
     }
 
-    if (turnUpdated === true)
+    if (turnUpdated === true) 
         document.getElementById("turnLabel").innerHTML = "It's " + turn + "'s turn";
 
     if (currentCardUpdated)
@@ -86,12 +90,23 @@ function updateUI(data) {
                     playButton.textContent = "Use";
                     playButton.addEventListener("click", function click() {
                        console.log("Playing " + JSON.stringify(card));
-                       playCard(card); 
+                       if (card.value === "color" || card.value === "+4") {
+                            playingCard = card;
+                            colorOptions.style.display = "inline";                    
+                        } else {
+                            playCard(card); 
+                        }
                     });
                     buttonCell.appendChild(playButton);
                 }
             }
         }
+    }
+
+    if (turn === name) {
+        document.getElementById("pickupButton").style.display = "block";
+    } else {
+        document.getElementById("pickupButton").style.display = "none";
     }
 }
 
@@ -99,13 +114,63 @@ window.onload = function() {
     
 };
 
-function playCard(card_to_play) {
+document.getElementById("redBtn").addEventListener("click", function click() {
+    if (JSON.stringify(playCard) === "")
+        return;
+
+    colorButton = "red";
+    playSpecialCard(playingCard, colorButton);
+    playingCard = {};
+    colorOptions.style.display = "none"
+});
+
+document.getElementById("greenBtn").addEventListener("click", function click() {
+    colorButton = "green";
+});
+
+document.getElementById("blueBtn").addEventListener("click", function click() {
+    colorButton = "blue";
+});
+
+document.getElementById("yellowBtn").addEventListener("click", function click() {
+    colorButton = "yellow";
+});
+
+function playSpecialCard(card_to_play, color) {
+    let data = {
+        "action": "playCard",
+        "card": card_to_play,
+        "color": color
+    }
+
     // Send current card to the server
+    console.log('Data = ' + JSON.stringify(data));
+
+    fetch('/updateGame', {
+        // Specify the method
+        method: 'POST',
+        // A JSON payload
+        // redirect: 'follow',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+        })
+    .then(function (response) { 
+         // At this point, Flask has printed our JSON
+        return response.text();
+    }).then(function (text) {
+        // Should be 'OK' if everything was successful
+        console.log(text);
+        });
+    colorOptions.style.display = "none";
+}
+
+function playCard(card_to_play) {
     let data = {
         "action": "playCard",
         "card": card_to_play
     }
 
+    // Send current card to the server
     console.log('Data = ' + JSON.stringify(data));
 
     fetch('/updateGame', {
