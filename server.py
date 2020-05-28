@@ -147,6 +147,8 @@ def updateGame():
                 response.append({'turn': game.getPlayer(game.getTurn()).getName()})
             if info_query == "currentCard":
                 response.append({'currentCard': game.getCurrentCard().getAsDict()})
+            if info_query == "winner":
+                response.append({'winner': game.getWinner()})
         if len(response) == 0:
             return 'No update generated', 200
         else:

@@ -9,6 +9,7 @@ class Game:
         self.disposedCards = list()
         self.currentCard = None
         self.reverse_factor = 1
+        self.winner = None
         colors = ['red', 'blue', 'green', 'yellow']
         action_cards = ['skip', '+2', 'reverse']
         wild_cards = ['color', '+4']
@@ -146,7 +147,18 @@ class Game:
                 self.currentCard.setColor(color)
                 print("Set current card color to " + self.currentCard.getColor())
 
+        if len(player.getCards()) == 0:
+            self.winner = player
+
 
     def pickUpCard(self, user):
         card_index = random.randint(0, len(self.cards) - 1)
         self.getPlayerCards(user).append(self.cards.pop(card_index))
+
+    def getWinner(self):
+        if (self.winner == None):
+            return "none"
+        return self.winner.getName()
+
+    def setWinner(self, player):
+        self.winner = player

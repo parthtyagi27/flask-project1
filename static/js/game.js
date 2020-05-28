@@ -14,7 +14,8 @@ async function getInfo() {
     let infoString = "";
     infoString += "cards,";
     infoString += "turn,";
-    infoString += "currentCard"
+    infoString += "currentCard,";
+    infoString += "winner";
 
     console.log("info query = " + infoString);
     if (infoString === "")
@@ -23,12 +24,18 @@ async function getInfo() {
     fetch("/updateGame?info=" + infoString, { method: 'GET',}).then(function(response) {
         return response.json();
     }).then(function(json) {
-        updateUI(json);
-        setTimeout(getInfo, 2500); 
+        if (updateUI(json) == true)
+            setTimeout(getInfo, 250); 
     });
 }
 
 function updateUI(data) {
+
+    if (data[3].winner !== "none") {
+        alert(data[3].winner + " has won!");
+        return false;
+    }
+
     let cardsUpdated = false;
     let turnUpdated = false;
     let currentCardUpdated = false;
@@ -108,6 +115,8 @@ function updateUI(data) {
     } else {
         document.getElementById("pickupButton").style.display = "none";
     }
+
+    return true;
 }
 
 window.onload = function() {
@@ -125,15 +134,33 @@ document.getElementById("redBtn").addEventListener("click", function click() {
 });
 
 document.getElementById("greenBtn").addEventListener("click", function click() {
+    if (JSON.stringify(playCard) === "")
+        return;
+
     colorButton = "green";
+    playSpecialCard(playingCard, colorButton);
+    playingCard = {};
+    colorOptions.style.display = "none"
 });
 
 document.getElementById("blueBtn").addEventListener("click", function click() {
+    if (JSON.stringify(playCard) === "")
+        return;
+
     colorButton = "blue";
+    playSpecialCard(playingCard, colorButton);
+    playingCard = {};
+    colorOptions.style.display = "none"
 });
 
 document.getElementById("yellowBtn").addEventListener("click", function click() {
+    if (JSON.stringify(playCard) === "")
+        return;
+
     colorButton = "yellow";
+    playSpecialCard(playingCard, colorButton);
+    playingCard = {};
+    colorOptions.style.display = "none"
 });
 
 function playSpecialCard(card_to_play, color) {
