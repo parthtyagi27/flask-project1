@@ -26,6 +26,11 @@ class Card(object):
     def getCardID(self):
         return self.card_id
 
+    def setColor(self, color):
+        self.color = color
+        self.json = {"id" : self.card_id, "color" : self.color, "value": self.value, "action": self.action_card}
+
+
     def __str__(self):
         return str(self.card_id) + " " + str(self.value) + " " + str(self.color)
 
