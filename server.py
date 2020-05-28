@@ -159,7 +159,12 @@ def updateGame():
         if update_json['action'] == "playCard":
             card_json = update_json['card']
             print("Playing card = " + str(card_json))
-            game.setCurrentCard(card_json['id'], user)
+            if len(update_json) == 2:
+                print("Playing normal card")
+                game.setCurrentCard(card_json['id'], user)
+            elif len(update_json) == 3:
+                print("Playing wild card")
+                game.setCurrentCard(card_json['id'], user, update_json['color'])
             game.nextPlayer()
             return 'OK', 200
         elif update_json['action'] == "pickCard":
