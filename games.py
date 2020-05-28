@@ -8,6 +8,7 @@ class Game:
         self.cards = list()
         self.disposedCards = list()
         self.currentCard = None
+        self.reverse_factor = 1
         colors = ['red', 'blue', 'green', 'yellow']
         action_cards = ['skip', '+2', 'reverse']
         wild_cards = ['color', '+4']
@@ -96,9 +97,11 @@ class Game:
         return self.turn
 
     def nextPlayer(self):
-        self.turn = self.turn + 1
+        self.turn = self.turn + (1 * self.reverse_factor)
         if (self.turn == len(self.playerList)):
             self.turn = 0
+        elif self.turn == -1:
+            self.turn = len(self.playerList) - 1
         return self.turn
 
     def getPlayer(self, index):
@@ -113,7 +116,7 @@ class Game:
     def getCurrentCard(self):
         return self.currentCard
 
-    def setCurrentCard(self, id, player):
+    def setCurrentCard(self, id, player, color = "keep"):
         # self.currentCard = self.cards[id]
         playerCards = self.getPlayerCards(player)
         print("Player cards = " + str(playerCards))
@@ -134,6 +137,14 @@ class Game:
                     self.pickUpCard(nextPlayer)
                     self.pickUpCard(nextPlayer)
                     self.pickUpCard(nextPlayer)
+            elif self.currentCard.getValue() == "skip":
+                self.nextPlayer()
+            elif self.currentCard.getValue() == "reverse":
+                self.reverse_factor = self.reverse_factor * -1
+
+            if color != "keep":
+                self.currentCard.setColor(color)
+                print("Set current card color to " + self.currentCard.getColor())
 
 
     def pickUpCard(self, user):
